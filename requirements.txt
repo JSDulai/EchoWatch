@@ -1,0 +1,5 @@
+matplotlib
+numpy
+pandas
+tensorflow==2.11.*
+tensorflow_io==0.28.*

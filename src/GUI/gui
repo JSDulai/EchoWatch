@@ -1,0 +1,138 @@
+import os
+import csv
+import sys
+sys.path.append("../EchoWatch")
+print(os.getcwd())
+import tensorflow as tf
+from models.model import create_model
+from utils.utilities import load_mp3_16k_mono, preprocess_wav_for_model
+from utils.preparation import prepare_data, split_data
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QGroupBox, QComboBox, QFileDialog, QHBoxLayout, QLineEdit
+
+class Startbildschirm(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle('Dein Audio-Klassifikator')
+        self.setGeometry(300, 100, 400, 200)  # x, y, width, height
+
+        # Haupt-Widget
+        self.main_widget = QWidget(self)
+        self.setCentralWidget(self.main_widget)
+
+        # Layout
+        main_layout = QVBoxLayout()
+
+        # Titel
+        title_label = QLabel("Dein Audio-Klassifikator", self)
+        title_label.setStyleSheet("font-size: 20px;")
+        title_label.setAlignment(Qt.AlignCenter)
+        main_layout.addWidget(title_label)
+
+        # Optionen Gruppenbox
+        options_group = QGroupBox("Wähle eine Option:")
+        options_layout = QVBoxLayout()
+
+        # Dropdown für Klassenanzahl
+        self.class_count_combo = QComboBox(self)
+        self.class_count_combo.addItems(['1', '2', '3', '4', '5'])
+        options_layout.addWidget(QLabel("Klassenanzahl:"))
+        options_layout.addWidget(self.class_count_combo)
+
+        # Button für Optionen
+        train_model_button = QPushButton('Neues Modell trainieren', self)
+        train_model_button.clicked.connect(self.open_training_page)  # Öffnet die Training-Seite
+        options_layout.addWidget(train_model_button)
+
+        options_group.setLayout(options_layout)
+        main_layout.addWidget(options_group)
+
+        # Set main layout
+        self.main_widget.setLayout(main_layout)
+
+        # Zeige das Hauptfenster
+        self.show()
+
+    def open_training_page(self):
+        class_count = int(self.class_count_combo.currentText())
+        self.training_page = TrainingPage(class_count)
+        self.training_page.show()
+
+
+class TrainingPage(QWidget):
+
+    def __init__(self, class_count):
+        super().__init__()
+
+        self.class_count = class_count
+        self.data_paths = {}  # Jetzt ist data_paths im gesamten Gültigkeitsbereich verfügbar
+
+        self.setWindowTitle('Neues Modell trainieren')
+        self.setGeometry(400, 200, 800, 600)  # x, y, width, height
+
+        # Layout
+        layout = QVBoxLayout()
+
+        # Anzahl der Klassen
+        class_label = QLabel(f"Anzahl der Klassen: {self.class_count}", self)
+        layout.addWidget(class_label)
+
+        # Klassen und Namen festlegen
+        self.class_labels = []
+        self.class_name_inputs = []
+        self.upload_data_buttons = []
+        for i in range(self.class_count):
+            class_name_input = QLineEdit(self)
+            class_label = QLabel(f"Klasse {i+1} Name:", self)
+            layout.addWidget(class_label)
+            layout.addWidget(class_name_input)
+            self.class_name_inputs.append(class_name_input)
+
+            upload_data_button = QPushButton('Datensatz hochladen', self)
+            upload_data_button.clicked.connect(lambda checked, idx=i: self.upload_data(idx))  # Bindet den Index als Argument
+            layout.addWidget(upload_data_button)
+            self.upload_data_buttons.append(upload_data_button)
+
+        # Epochen festlegen
+        self.epochs_input = QLineEdit(self)
+        layout.addWidget(QLabel("Anzahl der Epochen:", self))
+        layout.addWidget(self.epochs_input)
+
+        # Button zum Starten des Trainings
+        start_training_button = QPushButton('Modell trainieren', self)
+        start_training_button.clicked.connect(self.start_training)
+        layout.addWidget(start_training_button)
+
+        self.setLayout(layout)
+
+    def upload_data(self, class_index):
+        file_dialog = QFileDialog()
+        file_paths, _ = file_dialog.getOpenFileNames()
+        self.data_paths[class_index] = file_paths
+
+    def start_training(self):
+        class_names = [input.text() for input in self.class_name_inputs]
+        epochs = int(self.epochs_input.text())
+
+        # Verarbeite self.data_paths und class_names nach Bedarf
+        labels = [1 if f'{class_index + 1}' in filename else 0 for class_index in range(self.class_count) for filename in os.listdir(self.data_paths.get(class_index, []))]
+        data = prepare_data(os.path.join('data', 'pump', 'test'), labels)
+        train, test = split_data(data)
+
+        # Creating and training the model
+        model = create_model()
+        hist = model.fit(train, epochs=epochs, validation_data=test)
+
+        # Weitere Aktionen nach dem Training
+        # ...
+
+
+
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Startbildschirm()
+    sys.exit(app.exec_())
