@@ -11,8 +11,7 @@ def create_model():
     #model.compile('Adam', loss='BinaryCrossentropy', metrics=['accuracy', tf.keras.metrics.Recall(), tf.keras.metrics.Precision()]) #mit accuracy
     return model
 
-
-def create_optimized_model():
+#def create_optimized_model():
     model = tf.keras.models.Sequential()
 
     # Convolutional layers
@@ -41,9 +40,7 @@ def create_optimized_model():
 
     return model
 
-#gegebenfalls noch ein Modell erstellen für 2 Klassen und eins für mehr als 2?
-
-def create_moodel_pt():
+#def create_moodel_pt():
     model = tf.keras.models.Sequential()
     model.add(tf.keras.layers.Flatten(input_shape=(1491, 257, 1)))
     model.add(tf.keras.layers.Dense(128, activation='relu'))
@@ -55,8 +52,7 @@ def create_moodel_pt():
 
     return model
 
-
-def create_moodel():
+#def create_moodel():
     model = tf.keras.models.Sequential()
     model.add(tf.keras.layers.Flatten(input_shape=(1491, 257, 1)))
     model.add(tf.keras.layers.Dense(128, activation='relu'))
@@ -70,11 +66,7 @@ def create_moodel():
 
     return model
 
-
-
-
-
-def model_create():
+#def model_create():
 
     model = tf.keras.models.Sequential()
     model.add(tf.keras.layers.Flatten(input_shape=(1491, 257, 1)))
@@ -85,7 +77,7 @@ def model_create():
     model.compile('Adam', loss='CategoricalCrossentropy', metrics=['accuracy', tf.keras.metrics.Recall(), tf.keras.metrics.Precision()]) #mit accuracy\n    
     return model
 
-def modified_model_create():
+#def modified_model_create():
     model = tf.keras.models.Sequential()
     
     model.add(tf.keras.layers.Flatten(input_shape=(1491, 257, 1)))
@@ -104,8 +96,7 @@ def modified_model_create():
     
     return model
 
-
-def cnn_model_create():
+#def cnn_model_create():
     model = tf.keras.models.Sequential()
     
     model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(1491, 257, 1)))
@@ -145,8 +136,8 @@ def revised_cnn_model_create():
                   metrics=['accuracy', tf.keras.metrics.Recall(), tf.keras.metrics.Precision()])
     
     return model
-
-def revised_cnn_model_create1():
+# Model mit Dropout-Layer
+#def revised_cnn_model_create1(): 
     model = tf.keras.models.Sequential()
     
     model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(1491, 257, 1)))
@@ -170,19 +161,4 @@ def revised_cnn_model_create1():
     model.compile(optimizer='Adam', loss='CategoricalCrossentropy', 
                   metrics=['accuracy', tf.keras.metrics.Recall(), tf.keras.metrics.Precision()])
     
-    return model
-
-
-def neues_model():
-    model = tf.keras.models.Sequential()
-
-    model.add(tf.keras.layers.Dense(1000,activation='relu',input_shape=(1491, 257, 1)))
-    model.add(tf.keras.layers.Dense(750,activation='relu'))
-    model.add(tf.keras.layers.Dense(500,activation='relu'))
-    model.add(tf.keras.layers.Dense(250,activation='relu'))
-    model.add(tf.keras.layers.Dense(100,activation='relu'))
-    model.add(tf.keras.layers.Dense(50,activation='relu'))
-    model.add(tf.keras.layers.Dense(4,activation='softmax'))
-      
-        
     return model
