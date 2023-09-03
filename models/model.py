@@ -171,3 +171,18 @@ def revised_cnn_model_create1():
                   metrics=['accuracy', tf.keras.metrics.Recall(), tf.keras.metrics.Precision()])
     
     return model
+
+
+def neues_model():
+    model = tf.keras.models.Sequential()
+
+    model.add(tf.keras.layers.Dense(1000,activation='relu',input_shape=(1491, 257, 1)))
+    model.add(tf.keras.layers.Dense(750,activation='relu'))
+    model.add(tf.keras.layers.Dense(500,activation='relu'))
+    model.add(tf.keras.layers.Dense(250,activation='relu'))
+    model.add(tf.keras.layers.Dense(100,activation='relu'))
+    model.add(tf.keras.layers.Dense(50,activation='relu'))
+    model.add(tf.keras.layers.Dense(4,activation='softmax'))
+      
+        
+    return model

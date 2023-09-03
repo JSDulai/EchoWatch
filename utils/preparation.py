@@ -34,7 +34,7 @@ def prepare_data1(dataset_path): #class_names als Parameter hinzufügen
     #labels = [get_label_from_filename(filename, class_names) for filename in os.listdir(dataset_path)]
     data = tf.data.Dataset.from_tensor_slices((file_paths, labels))
     data = data.map(lambda filepath, label: (preprocess_wav_for_model(load_wav_16k_mono(filepath)), label))
-    data = data.cache().shuffle(buffer_size=1000).batch(12).prefetch(6)
+    data = data.cache().shuffle(buffer_size=1000).batch(8).prefetch(4)
     return data
 
 def split_data1(data):
