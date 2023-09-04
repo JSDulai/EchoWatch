@@ -1,6 +1,11 @@
 import os
+import sounddevice as sd
 import tensorflow as tf
 import tensorflow_io as tfio
+import numpy as np
+import time
+import wave
+import matplotlib as plt
 from itertools import groupby
 
 def load_audio(filename, target_sample_rate=16000):
@@ -63,3 +68,42 @@ def predict_with_saved_model(model_path, wav_file_path):
     predictions = loaded_model.predict(processed_wav_batched)
     predicted_class = tf.argmax(predictions, axis=1).numpy()[0]
     return predicted_class
+
+def live_audio_classification(model):
+    
+    print(sd.query_devices())
+
+    
+    # Wartezeit von 3 Sekunden vor der Aufnahme
+    print("Warten Sie 3 Sekunden vor der Aufnahme...")
+    time.sleep(3)
+
+    # 10 Sekunden Audioaufnahme
+    print("Nehmen Sie 10 Sekunden Audio auf...")
+    recording_duration = 10  # in Sekunden
+    samplerate = 16000  # Samplerate von 16 kHz, kann nach Bedarf angepasst werden
+
+    with sd.InputStream(samplerate=samplerate, channels=1, dtype='float32') as stream:
+        audio_data, overflowed = stream.read(int(samplerate * recording_duration))
+        
+    # Speichern Sie die aufgenommene Audio-Daten als WAV-Datei, um sie zu überprüfen
+    with wave.open('aufnahme.wav', 'w') as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(samplerate)
+        wf.writeframes(audio_data.tobytes())
+
+
+    # Vorverarbeitung der Audio-Daten
+    print("Verarbeiten der Audio-Daten...")
+    audio_data_reshaped = tf.reshape(audio_data, [-1])
+    processed_data = preprocess_wav_for_model(audio_data_reshaped)
+
+
+    # Klassifikation der Daten mit dem Modell
+    print("Klassifizierung der Audio-Daten...")
+    prediction = model.predict(np.expand_dims(processed_data, axis=0))
+
+    # Anzeige der Klassifikationsergebnisse
+    print("Klassifikationsergebnis:", prediction)
+    return print("Die vorhergesagte Klasse ist:", np.argmax(prediction))

@@ -5,7 +5,7 @@ import sys
 sys.path.append("../EchoWatch")
 import tensorflow as tf
 from models.model import create_model,revised_cnn_model_create
-from utils.utilities import load_audio, preprocess_wav_for_model, get_input_shape_from_data, predict_from_wav, load_wav_16k_mono
+from utils.utilities import load_audio, preprocess_wav_for_model, get_input_shape_from_data, predict_from_wav, load_wav_16k_mono, live_audio_classification
 from utils.preparation import prepare_data, split_data
 
 def main_binary_classification(data_path, class_names, num_classes, output_filename='predictions_binary.csv'):
@@ -22,8 +22,9 @@ def main_binary_classification(data_path, class_names, num_classes, output_filen
 
 def main_multiclass_classification(data_path, class_names, num_classes, output_filename='predictions_multiclass.csv'):
     
-    predict_with_saved_model(model_path = "../EchoWatch/models/pt500_model.h5", wav_file_path="../EchoWatch/data/PT500/C_1000_23.wav")
-
+    #predict_with_saved_model(model_path = "../EchoWatch/models/pt500_model.h5", wav_file_path="../EchoWatch/data/PT500/C_1000_23.wav")
+    loaded_model = tf.keras.models.load_model("../EchoWatch/models/pt500_model.h5")
+    live_audio_classification(loaded_model)
 
     data = prepare_data(data_path, class_names, num_classes)
     train, val, test = split_data(data)
