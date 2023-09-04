@@ -128,7 +128,7 @@ def revised_cnn_model_create():
     model.add(tf.keras.layers.MaxPooling2D((4, 4)))
     
     model.add(tf.keras.layers.Flatten())
-    model.add(tf.keras.layers.Dense(32, activation='relu',kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(tf.keras.layers.Dense(32, activation='relu',kernel_regularizer=tf.keras.regularizers.l2(0.9)))
     model.add(tf.keras.layers.BatchNormalization())
     model.add(tf.keras.layers.Dense(4, activation='softmax'))
     
@@ -137,7 +137,7 @@ def revised_cnn_model_create():
     
     return model
 # Model mit Dropout-Layer
-#def revised_cnn_model_create1(): 
+def revised_cnn_model_create1(): 
     model = tf.keras.models.Sequential()
     
     model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(1491, 257, 1)))

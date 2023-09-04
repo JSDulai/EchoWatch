@@ -4,122 +4,91 @@ import csv
 import sys
 sys.path.append("../EchoWatch")
 import tensorflow as tf
-from models.model import create_model, create_optimized_model, create_moodel, model_create, create_moodel_pt, modified_model_create, cnn_model_create, revised_cnn_model_create, revised_cnn_model_create1, neues_model
-from utils.utilities import load_mp3_16k_mono, preprocess_wav_for_model, load_wav_16k_mono, get_input_shape_from_data, predict_from_wav, predict_with_saved_model
-from utils.preparation import prepare_data, split_data, prepare_data1, get_label_from_filename1, split_data1
+from models.model import create_model,revised_cnn_model_create
+from utils.utilities import load_audio, preprocess_wav_for_model, get_input_shape_from_data, predict_from_wav, load_wav_16k_mono, live_audio_classification
+from utils.preparation import prepare_data, split_data
 
-
-def main():
-    #Datensatz wird geladen, vorbereitet und geteilt.
-    data_path = os.path.join('data', 'pump', "test")
-    #klassennamen = ["A_1000", "B_1000", "C_1000", "D_1000"]
-    #get_label_from_filepath1(data_path)
-    data = prepare_data(data_path)
-    #data = prepare_data(data_path, klassennamen)
+def main_binary_classification(data_path, class_names, num_classes, output_filename='predictions_binary.csv'):
+    data = prepare_data(data_path, class_names, num_classes)
     train, test = split_data(data)
-   
-    #Model wird erstellt.
-    model = modified_model_create()
+    
+    # Create and train the model
+    model = create_binary_model()
     model.summary()
-    hist = model.fit(train, epochs=30, validation_data=test)
+    hist = model.fit(train, epochs=3, validation_data=test)  # Reduced epochs for testing
+    
+    # Predict and save results
+    save_predictions_to_csv(model, data_path, output_filename, binary=True)
 
+def main_multiclass_classification(data_path, class_names, num_classes, output_filename='predictions_multiclass.csv'):
+    
+    #predict_with_saved_model(model_path = "../EchoWatch/models/pt500_model.h5", wav_file_path="../EchoWatch/data/PT500/C_1000_23.wav")
+    loaded_model = tf.keras.models.load_model("../EchoWatch/models/pt500_model.h5")
+    live_audio_classification(loaded_model)
 
-    #Ergebnisse werden in result gespeichert.
-    results = {}
-    for file in os.listdir(data_path):
-        FILEPATH = os.path.join(data_path, file)
-        wav = load_mp3_16k_mono(FILEPATH)
-        processed_wav = preprocess_wav_for_model(wav)
-        processed_wav_batched = tf.expand_dims(processed_wav, axis=0)
-        predictions = model.predict(processed_wav_batched)
-        
-        #Konvertieren der Vorhersagen in 0 oder 1 basierend auf einem Schwellenwert von 0.5
-        binary_prediction = 1 if predictions[0][0] > 0.5 else 0
-        results[file] = binary_prediction
-
-
-    #Result wird in eine csv abgespeichert.
-    with open('predictions.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(['Dateiname', 'Vorhersage'])  # Überschrift
-        for key, value in results.items():
-            writer.writerow([key, value])
-
-
-    return 'Fertig! Ergebnisse in predictions.csv gespeichert.'
-
-
-#main()
-
-
-
-
-
-def main1():
-
-    predict_with_saved_model(model_path = "../EchoWatch/models/pt500_model.h5", wav_file_path="../EchoWatch/data/PT500/A_1000_23.wav")
-
-    #Datensatz wird geladen, vorbereitet und geteilt.
-
-
-
-    data_path = os.path.join('data', 'PT500')
-    data = prepare_data1(data_path)
-    train, val, test = split_data1(data)
-    shapee = get_input_shape_from_data(data_path)
-    print(shapee)
-
-    #Model wird erstellt.
-    model = revised_cnn_model_create()
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=2, restore_best_weights=True)
+    data = prepare_data(data_path, class_names, num_classes)
+    train, val, test = split_data(data)
+    
+    # Create and train the model
+    model = revised_cnn_model_create() 
     model.summary()
-
-    hist = model.fit(train, epochs=5, validation_data=val, callbacks=early_stopping)
-
+    hist = model.fit(train, epochs=4, validation_data=val)  # Reduced epochs for testing
+    
     loss, accuracy, recall, precision = model.evaluate(test)
     print(f"Test Loss: {loss}")
     print(f"Test Accuracy: {accuracy}")
-    
-    #Das alles nur um die Matrix zu machen.
-    test_labels_list = []
-    predicted_labels_list = []
 
-    for test_features, test_labels in test:
-        predicted_scores = model.predict(test_features)
-        predicted_batch_labels = tf.argmax(predicted_scores, axis=1).numpy()
-        test_labels_list.extend(tf.argmax(test_labels, axis=1).numpy())
-        predicted_labels_list.extend(predicted_batch_labels)
+    loaded_model = tf.keras.models.load_model("../EchoWatch/models/pt500_model.h5")
+    # Predict and save results
+    save_predictions_to_csv(model, data_path, output_filename, binary=False)
 
-    confusion_mat = tf.math.confusion_matrix(test_labels_list, predicted_labels_list)
-    print(confusion_mat)
-
-    # Save the trained model
-    model.save('../EchoWatch/models/pt500_model.h5')
-    
-
-
-    #Ergebnisse werden in result gespeichert.
+def save_predictions_to_csv(model, data_path, output_filename, binary=True):
     results = {}
     for file in os.listdir(data_path):
         FILEPATH = os.path.join(data_path, file)
         wav = load_wav_16k_mono(FILEPATH)
+        
         processed_wav = preprocess_wav_for_model(wav)
         processed_wav_batched = tf.expand_dims(processed_wav, axis=0)
         predictions = model.predict(processed_wav_batched)
+        
+        if binary:
+            binary_prediction = 1 if predictions[0][0] > 0.5 else 0
+            results[file] = binary_prediction
+        else:
+            predicted_class = tf.argmax(predictions, axis=1).numpy()[0]
+            print(predicted_class)
+            results[file] = predicted_class
 
-        predicted_class = tf.argmax(predictions, axis=1).numpy()[0]
-        results[file] = predicted_class
-
-
-    #Result wird in eine csv abgespeichert.
-    with open('predictions.csv', 'w', newline='') as csvfile:
+    # Save results to CSV
+    with open(output_filename, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Dateiname', 'Zustand'])  # Überschrift
+        writer.writerow(['Dateiname', 'Vorhersage'])  
         for key, value in results.items():
-            writer.writerow([key, ['Normal', 'Innenringschaden', 'Außenringschaden', 'Verschleiß'][value]])
+            writer.writerow([key,value])
 
 
-    return 'Fertig! Ergebnisse in predictions.csv gespeichert.'
 
+def predict_with_saved_model(model_path , wav_file_path):
+    # Load the saved model
+    loaded_model = tf.keras.models.load_model(model_path)
+    
+    # Process the WAV file
+    wav = load_wav_16k_mono(wav_file_path)
+    processed_wav = preprocess_wav_for_model(wav)
+    processed_wav_batched = tf.expand_dims(processed_wav, axis=0)
+    
+    # Make predictions
+    predictions = loaded_model.predict(processed_wav_batched)
+    
+    # Return the class with the highest probability
+    #predicted_class = tf.argmax(predictions[0]).numpy()
 
-main1()
+    predicted_class = tf.argmax(predictions, axis=1).numpy()[0]
+    return print(predicted_class)
+
+# Example usage
+data_path = os.path.join('data', 'PT500')
+class_names=['A', 'B', 'C', 'D']
+num_classes=4
+main_multiclass_classification(data_path, class_names, num_classes)
