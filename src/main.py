@@ -4,9 +4,9 @@ import csv
 import sys
 sys.path.append("../EchoWatch")
 import tensorflow as tf
-from models.model import create_model,revised_cnn_model_create
+from models.model import create_model,revised_cnn_model_create, piczak_modell
 from utils.utilities import load_audio, preprocess_wav_for_model, get_input_shape_from_data, predict_from_wav, load_wav_16k_mono, live_audio_classification
-from utils.preparation import prepare_data, split_data
+from utils.preparation import prepare_data, split_data, prepare_data1
 
 def main_binary_classification(data_path, class_names, num_classes, output_filename='predictions_binary.csv'):
     data = prepare_data(data_path, class_names, num_classes)
@@ -23,16 +23,16 @@ def main_binary_classification(data_path, class_names, num_classes, output_filen
 def main_multiclass_classification(data_path, class_names, num_classes, output_filename='predictions_multiclass.csv'):
     
     #predict_with_saved_model(model_path = "../EchoWatch/models/pt500_model.h5", wav_file_path="../EchoWatch/data/PT500/C_1000_23.wav")
-    loaded_model = tf.keras.models.load_model("../EchoWatch/models/pt500_model.h5")
-    live_audio_classification(loaded_model)
+    #loaded_model = tf.keras.models.load_model("../EchoWatch/models/pt500_model.h5")
+    #live_audio_classification(loaded_model)
 
     data = prepare_data(data_path, class_names, num_classes)
     train, val, test = split_data(data)
     
     
-    model = revised_cnn_model_create() 
+    model = piczak_modell() 
     model.summary()
-    hist = model.fit(train, epochs=4, validation_data=val)  # Reduced epochs for testing
+    hist = model.fit(train, epochs=20, validation_data=val)  # Reduced epochs for testing
     
     loss, accuracy, recall, precision = model.evaluate(test)
     print(f"Test Loss: {loss}")
