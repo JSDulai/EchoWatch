@@ -17,7 +17,7 @@ def load_audio(filename, target_sample_rate=16000):
     elif file_extension == ".mp3":
         return load_mp3_16k_mono(filename)
     else:
-        raise ValueError(f"Unsupported file extension: {file_extension}")
+        raise ValueError(f"Dateiendung wird nicht unterstützt: {file_extension}")
 
 def load_wav_16k_mono(filename):
     file_contents = tf.io.read_file(filename)
@@ -72,21 +72,21 @@ def predict_with_saved_model(model_path, wav_file_path):
 def live_audio_classification(model):
     
     print(sd.query_devices())
-
     
-    # Wartezeit von 3 Sekunden vor der Aufnahme
-    print("Warten Sie 3 Sekunden vor der Aufnahme...")
+    #3 Sekunden warten, da nicht immer sofort alles passt.
+    print("Aufnahme startet in 3 Sekunden!")
     time.sleep(3)
 
     # 10 Sekunden Audioaufnahme
-    print("Nehmen Sie 10 Sekunden Audio auf...")
+    print("Audio wird aufgenommen...")
     recording_duration = 10  # in Sekunden
     samplerate = 16000  # Samplerate von 16 kHz, kann nach Bedarf angepasst werden
 
-    with sd.InputStream(samplerate=samplerate, channels=1, dtype='float32') as stream:
+    
+    with sd.InputStream(device=3,samplerate=samplerate, channels=1, dtype='float32') as stream:  #je nach device von der query, muss device=3 angepasst werden
         audio_data, overflowed = stream.read(int(samplerate * recording_duration))
         
-    # Speichern Sie die aufgenommene Audio-Daten als WAV-Datei, um sie zu überprüfen
+    # wav speichern
     with wave.open('aufnahme.wav', 'w') as wf:
         wf.setnchannels(1)
         wf.setsampwidth(2)
@@ -94,14 +94,10 @@ def live_audio_classification(model):
         wf.writeframes(audio_data.tobytes())
 
 
-    # Vorverarbeitung der Audio-Daten
-    print("Verarbeiten der Audio-Daten...")
+    # Preproccesing der Audio
     audio_data_reshaped = tf.reshape(audio_data, [-1])
     processed_data = preprocess_wav_for_model(audio_data_reshaped)
-
-
     # Klassifikation der Daten mit dem Modell
-    print("Klassifizierung der Audio-Daten...")
     prediction = model.predict(np.expand_dims(processed_data, axis=0))
 
     # Anzeige der Klassifikationsergebnisse
