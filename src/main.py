@@ -27,10 +27,10 @@ def main_binary_classification(data_path, class_names, num_classes, acti_func ='
         model = model_optimized(num_classes, acti_func, loss_func) 
         model.summary()
         callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                patience=10,
+                                                patience=1,
                                                 restore_best_weights=True)
         # Training des Modells mit den Trainingsdaten
-        hist = model.fit(train_dataset, epochs=70, validation_data=val_dataset, callbacks=callback)
+        hist = model.fit(train_dataset, epochs=3, validation_data=val_dataset, callbacks=callback)
 
         # Evaluieren der Modellperformance mit den Testdaten
         loss, accuracy, recall, precision = model.evaluate(test_dataset)
@@ -40,7 +40,7 @@ def main_binary_classification(data_path, class_names, num_classes, acti_func ='
     with open('pump_model_metrics.txt', 'w') as f:
         f.write(f"Test Loss: {loss}\n")
         f.write(f"Test Accuracy: {accuracy}\n")
-    model.save('binary_pump_model.h5')
+    model.save('./models/binary_pump_model.h5')
     save_predictions_to_csv(model, data_path, output_filename, binary=True)
 
 # Funktion für multiklassen Klassifikation von Maschinengeräuschen
@@ -57,10 +57,10 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
         model = model_optimized(num_classes, acti_func, loss_func) 
         model.summary()
         callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                patience=10,
+                                                patience=1,
                                                 restore_best_weights=True)
         # Training des Modells mit den Trainingsdaten
-        hist = model.fit(train_dataset, epochs=70, validation_data=val_dataset, callbacks=callback)
+        hist = model.fit(train_dataset, epochs=3, validation_data=val_dataset, callbacks=callback)
 
         # Evaluieren der Modellperformance mit den Testdaten
         loss, accuracy, recall, precision = model.evaluate(test_dataset)
@@ -73,7 +73,7 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
 
     # Erstellen und Initialisieren des Klassifikationsmodells
     #loaded_model = tf.keras.models.load_model("../EchoWatch/models/pt500_model.h5")
-    model.save('multiclass_pt500_model.h5')
+    model.save('./models/multiclass_pt500_model.h5')
 
     save_predictions_to_csv(model, data_path, output_filename, binary=False)
 
