@@ -7,7 +7,7 @@ import numpy as np
 from utils.preparation import prepare_data_optimization
 from sklearn.model_selection import KFold
 
-
+# Erstellung eines Modells mit gegebenen Hyperparametern
 def create_model(input_shape=(1491, 257, 1), num_classes=6, 
                              conv2d_filters=(32, 64, 128), kernel_size=(3, 3), 
                              max_pooling_size=(2, 2), dense_units=32, 
@@ -35,7 +35,7 @@ def create_model(input_shape=(1491, 257, 1), num_classes=6,
 
     return model
 
-
+# Funktion zur Durchführung einer Grid-Search zur Hyperparameter-Optimierung
 def grid_search_hyperparameter_optimization(data, labels, param_grid, n_splits=5):
 
     best_params = None
@@ -71,7 +71,7 @@ def grid_search_hyperparameter_optimization(data, labels, param_grid, n_splits=5
 
     return best_params
 
-
+# 'Grid' der Hyperparamter für Suche
 param_grid = {
     'conv2d_filters': [(16, 32, 64), (32, 64, 128), (64, 128, 256)],
     'kernel_size': [(3, 3), (5, 5)],
@@ -84,9 +84,9 @@ param_grid = {
 data_path = os.path.join('data', 'PT500')
 class_names=['A', 'B', 'C', 'D', 'E','F']
 num_classes=6
-
 data_np, labels_np = prepare_data_optimization(data_path, class_names, num_classes)
 
+# Führt die Grid-Search zur Hyperparameter-Optimierung durch und gibt die besten Parameter aus
 best_params = grid_search_hyperparameter_optimization(data_np, labels_np, param_grid, n_splits=5)
 print("Beste Hyperparameter: ", best_params)
 

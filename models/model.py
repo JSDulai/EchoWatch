@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-
+# Einfaches Modell mit einer kleineren Anzahl von Schichten vom YouTube Tutorial.
 def simple_model(num_classes, actiFunc, loss_func):
     model = tf.keras.models.Sequential()
     model.add(tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(1491, 257, 1)))
@@ -11,6 +11,7 @@ def simple_model(num_classes, actiFunc, loss_func):
     model.compile('Adam', loss=loss_func, metrics=['accuracy', tf.keras.metrics.Recall(), tf.keras.metrics.Precision()])
     return model
 
+# Ein optimiertes Modell, das auf Grundlage von Hyperparameter-Optimierungsergebnissen erstellt wurde.
 def model_optimized(num_classes, actiFunc, loss_func):
     model = tf.keras.models.Sequential()
     
@@ -33,7 +34,7 @@ def model_optimized(num_classes, actiFunc, loss_func):
     
     return model
 
-# Model mit Dropout-Layer
+# Modell mit Dropout-Schichten zur Reduzierung von Overfitting.
 def model_dropout(num_classes, actiFunc, loss_func): 
     model = tf.keras.models.Sequential()
     
@@ -60,7 +61,7 @@ def model_dropout(num_classes, actiFunc, loss_func):
     
     return model
 
-
+# Modell basierend auf der Architektur von Piczak für Umgebungsgeräuschklassifikation.
 def modell_piczak(num_classes, actiFunc, loss_func):
     model = tf.keras.Sequential()
 
