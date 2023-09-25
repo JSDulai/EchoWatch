@@ -26,9 +26,7 @@ def load_audio(filepaths):
 # Laden einer WAV-Datei mit einer Abtastrate von 16kHz im Mono-Format
 def load_wav_16k_mono(filename):
     file_contents = tf.io.read_file(filename)
-    wav, sample_rate = tf.audio.decode_wav(
-          file_contents,
-          desired_channels=1)
+    wav, sample_rate = tf.audio.decode_wav(file_contents, desired_channels=1)
     wav = tf.squeeze(wav, axis=-1)
     sample_rate = tf.cast(sample_rate, dtype=tf.int64)
     wav = tfio.audio.resample(wav, rate_in=sample_rate, rate_out=16000)
@@ -70,6 +68,7 @@ def predict_with_saved_model(model_path, wav_file_path):
     predictions = loaded_model.predict(processed_wav_batched)
     predicted_class = tf.argmax(predictions, axis=1).numpy()[0]
     return predicted_class
+    #BEISPIELAUFRUF: predict_with_saved_model(model_path = "../EchoWatch/models/pt500_model.h5", wav_file_path="../EchoWatch/data/PT500/C_1000_23.wav")
 
 # Live-Klassifikation mit einem Mikrofon an der Maschine
 def live_audio_classification(model):
@@ -98,6 +97,7 @@ def live_audio_classification(model):
     # Anzeige der Klassifikationsergebnisse
     print("Klassifikationsergebnis:", prediction)
     return print("Die vorhergesagte Klasse ist:", np.argmax(prediction))
+    #BEISPIELAUFRUF: live_audio_classification(loaded_model)
 
 # Teilen der Audiodatei in mehrere Abschnitte und Speichern als separate WAV-Dateien
 def split_and_save_audio_chunks(audio_path, target, split_len=10):
@@ -122,6 +122,8 @@ def split_and_save_audio_chunks(audio_path, target, split_len=10):
     if len(audio) % split_len_ms:
         last_chunk = audio[num_chunks * split_len_ms:]
         last_chunk.export(os.path.join(split_dir, f"{base_filename}_{num_chunks + 1}.wav"), format="wav")
+
+    #BEISPIELAUFRUF: split_and_save_audio_chunks("../EchoWatch/data/F_1500.wav", "PT500")
 
 # Speichern der Modellvorhersagen in einer CSV-Datei
 def save_predictions_to_csv(model, data_path, output_filename, binary=True):
