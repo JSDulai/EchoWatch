@@ -6,7 +6,7 @@ from models.model import model_dropout, model_optimized, modell_piczak, simple_m
 from utils.utilities import save_predictions_to_csv, preprocess_wav_for_model, load_wav_16k_mono, live_audio_classification, split_and_save_audio_chunks, predict_with_saved_model
 from utils.preparation import prepare_data, split_data
 
-
+# Funktion für binäre Klassifikation von Maschinengeräuschen
 def main_binary_classification(data_path, class_names, num_classes, acti_func ='sigmoid', loss_func = 'BinaryCrossentropy', output_filename='predictions_binary.csv'):
     data = prepare_data(data_path, class_names, num_classes)
     train, test = split_data(data)
@@ -19,6 +19,7 @@ def main_binary_classification(data_path, class_names, num_classes, acti_func ='
     
     save_predictions_to_csv(model, data_path, output_filename, binary=True)
 
+# Funktion für multiklassen Klassifikation von Maschinengeräuschen
 def main_multiclass_classification(data_path, class_names, num_classes, acti_func ='softmax', loss_func = 'CategoricalCrossentropy', output_filename='predictions_multiclass.csv'):
     
     #split_and_save_audio_chunks("../EchoWatch/data/F_1500.wav", "PT500")
@@ -37,13 +38,15 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
     callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
                                             patience=10,
                                             restore_best_weights=True)
+    # Training des Modells mit den Trainingsdaten
+    hist = model.fit(train, epochs=100, validation_data=val)
     
-    hist = model.fit(train, epochs=100, validation_data=val)  # Reduced epochs for testing
-    
+    # Evaluieren der Modellperformance mit den Testdaten
     loss, accuracy, recall, precision = model.evaluate(test)
     print(f"Test Loss: {loss}")
     print(f"Test Accuracy: {accuracy}")
-
+    
+    # Erstellen und Initialisieren des Klassifikationsmodells
     loaded_model = tf.keras.models.load_model("../EchoWatch/models/pt500_model.h5")
     
     save_predictions_to_csv(model, data_path, output_filename, binary=False)
