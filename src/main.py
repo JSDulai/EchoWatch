@@ -68,12 +68,12 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
 
 data_path = os.path.join('data', 'PT500')
 class_names=['A', 'B', 'C', 'D', 'E', 'F']
-num_classes=6
+num_classes=len(class_names)
 main_multiclass_classification(data_path, class_names, num_classes)
 
 data_path1 = os.path.join('data', 'pump', 'test')
 class_names1 = ['normal', 'anomaly']
-num_classes1 = 2
+num_classes1 = len(class_names1)
 main_binary_classification(data_path1, class_names1, num_classes1)
 
 #loaded_model = tf.keras.models.load_model("../EchoWatch/models/pt500_model.h5")
