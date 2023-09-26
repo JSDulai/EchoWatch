@@ -3,7 +3,7 @@ import sys
 sys.path.append("../EchoWatch")
 import tensorflow as tf
 from models.model import model_dropout, model_optimized, modell_piczak, simple_model
-from utils.utilities import save_predictions_to_csv, preprocess_wav_for_model, load_wav_16k_mono, live_audio_classification, split_and_save_audio_chunks, predict_with_saved_model
+from utils.utilities import save_predictions_to_csv, plot_confusion_matrix, preprocess_wav_for_model, load_wav_16k_mono, live_audio_classification, split_and_save_audio_chunks, predict_with_saved_model
 from utils.preparation import prepare_data, split_data
 
 # Funktion für binäre Klassifikation von Maschinengeräuschen
@@ -47,15 +47,17 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
     model = model_optimized(num_classes, acti_func, loss_func) 
     model.summary()
    
-    callback_loss = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-    callback_acc = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=10, restore_best_weights=True)
+    callback_loss = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=1, restore_best_weights=True)
+    callback_acc = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=1, restore_best_weights=True)
 
-    hist = model.fit(train, epochs=100, validation_data=val, callbacks=[callback_loss, callback_acc])
+    hist = model.fit(train, epochs=10, validation_data=val, callbacks=[callback_loss, callback_acc])
     
     loss, accuracy, recall, precision = model.evaluate(test)
     print(f"Test Loss: {loss}")
     print(f"Test Accuracy: {accuracy}")
     
+    plot_confusion_matrix(model, test, class_names, save_path='./models/matrices/model_optimized.png')
+
     model.save('./models/multiclass_pt500_model.h5')
 
     with open('pt500_model_metrics.txt', 'w') as f:
@@ -63,7 +65,6 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
         f.write(f"Test Accuracy: {accuracy}\n")
     
     save_predictions_to_csv(model, data_path, output_filename, binary=False)
-
 
 
 data_path = os.path.join('data', 'PT500')
