@@ -15,13 +15,14 @@ def main_binary_classification(data_path, class_names, num_classes, acti_func ='
     
     # Modell wird geladen
     model = model_optimized(num_classes, acti_func, loss_func) 
-    #model.summary()
-    # EarlyStopping-Callback, der das Training stoppt, wenn 'val_loss' sich für 10 Epochen nicht verbessert und die besten Gewichte wiederherstellt.
-    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=15, restore_best_weights=True)
-
+    model.summary()
     
+    # EarlyStopping-Callback, der das Training stoppt, wenn 'val_loss' und 'val_accuracy' sich für 10 Epochen nicht verbessert und die besten Gewichte wiederherstellt.
+    callback_loss = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    callback_acc = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=10, restore_best_weights=True)
+
     # Training des Modells mit den Trainingsdaten
-    hist = model.fit(train, epochs=150, validation_data=val)
+    hist = model.fit(train, epochs=100, validation_data=val, callbacks=[callback_loss, callback_acc])
     
     # Evaluieren der Modellperformance mit den Testdaten
     loss, accuracy, recall, precision = model.evaluate(test)
@@ -45,16 +46,16 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
     
     model = model_optimized(num_classes, acti_func, loss_func) 
     model.summary()
-    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=15, restore_best_weights=True)
-    
-    hist = model.fit(train, epochs=150, validation_data=val)
+   
+    callback_loss = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    callback_acc = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=10, restore_best_weights=True)
+
+    hist = model.fit(train, epochs=100, validation_data=val, callbacks=[callback_loss, callback_acc])
     
     loss, accuracy, recall, precision = model.evaluate(test)
     print(f"Test Loss: {loss}")
     print(f"Test Accuracy: {accuracy}")
     
-    
-
     model.save('./models/multiclass_pt500_model.h5')
 
     with open('pt500_model_metrics.txt', 'w') as f:
