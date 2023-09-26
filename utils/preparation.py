@@ -4,7 +4,7 @@ import numpy as np
 from utils.utilities import load_audio, preprocess_wav_for_model, load_wav_16k_mono
 
 # Daten werdem aus dem angegebenen Pfad geladen, vorbereitet und in ein Tensorflow Datensatz umgewandlet.
-def prepare_data(dataset_path, class_names, num_classes, batch_size=32, buffer_size=1000):
+def prepare_data(dataset_path, class_names, num_classes, batch_size=4, buffer_size=1000):
     file_paths = [os.path.join(dataset_path, filename) for filename in os.listdir(dataset_path)]
     labels = [tf.keras.utils.to_categorical(get_label_from_filename(filename, class_names), num_classes=num_classes) for filename in os.listdir(dataset_path)]
     data = tf.data.Dataset.from_tensor_slices((file_paths, labels))

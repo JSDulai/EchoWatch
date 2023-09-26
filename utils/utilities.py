@@ -141,7 +141,7 @@ def save_predictions_to_csv(model, data_path, output_filename, binary=True):
             results[file] = binary_prediction
         else:
             predicted_class = tf.argmax(predictions, axis=1).numpy()[0]
-            print(predicted_class)
+            #print(predicted_class)
             results[file] = predicted_class
 
     
