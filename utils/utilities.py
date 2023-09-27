@@ -3,6 +3,8 @@ import tensorflow as tf
 import tensorflow_io as tfio
 import numpy as np
 from pydub import AudioSegment
+import seaborn as sns
+import matplotlib.pyplot as plt
 import sounddevice as sd
 import csv
 import time
@@ -150,3 +152,31 @@ def save_predictions_to_csv(model, data_path, output_filename, binary=True):
         writer.writerow(['Dateiname', 'Vorhersage'])  
         for key, value in results.items():
             writer.writerow([key,value])
+
+# Konfusionmatrix wird erstellt und angezeigt. Nach dem Training!
+def plot_confusion_matrix(model, test, class_names, save_path=None):
+    test_labels_list = []
+    predicted_labels_list = []
+
+    for test_features, test_labels in test:
+        predicted_scores = model.predict(test_features)
+        predicted_batch_labels = tf.argmax(predicted_scores, axis=1).numpy()
+
+        test_labels_list.extend(tf.argmax(test_labels, axis=1).numpy())
+        predicted_labels_list.extend(predicted_batch_labels)
+
+    confusion_mat = tf.math.confusion_matrix(test_labels_list, predicted_labels_list)
+
+    plt.figure(figsize=(10, 7))
+    sns.heatmap(confusion_mat, annot=True, fmt='g', cmap='Greens', 
+                xticklabels=class_names, yticklabels=class_names)
+    plt.xlabel('Vorhergesagt')
+    plt.ylabel('Tatsächlich')
+    plt.title('Konfusionsmatrix')
+    
+    # Überprüfen, ob ein Speicherort angegeben wurde, weil manchmal will man es nur anzeigen!
+    if save_path:
+        plt.savefig(save_path, format='png', bbox_inches='tight')
+    else:
+        plt.show()
+
