@@ -179,3 +179,4 @@ def plot_confusion_matrix(model, test, class_names, save_path=None):
         plt.savefig(save_path, format='png', bbox_inches='tight')
     else:
         plt.show()
+

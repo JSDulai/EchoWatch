@@ -62,7 +62,7 @@ def model_dropout(num_classes, actiFunc, loss_func):
     return model
 
 # Modell basierend auf der Architektur von Piczak für Umgebungsgeräuschklassifikation.
-def modell_piczak(num_classes, actiFunc, loss_func):
+def model_piczak(num_classes, actiFunc, loss_func):
     model = tf.keras.Sequential()
 
     # First convolutional layer
