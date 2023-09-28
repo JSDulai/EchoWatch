@@ -37,11 +37,11 @@ def main_binary_classification(data_path, class_names, num_classes, acti_func ='
     model.summary()
     
     # EarlyStopping-Callback, der das Training stoppt, wenn 'val_loss' und 'val_accuracy' sich für 10 Epochen nicht verbessert und die besten Gewichte wiederherstellt.
-    callback_loss = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=1, restore_best_weights=True)
-    callback_acc = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=1, restore_best_weights=True)
+    callback_loss = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=6, restore_best_weights=True)
+    callback_acc = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=6, restore_best_weights=True)
 
     # Training des Modells mit den Trainingsdaten
-    hist = model.fit(train, epochs=10, validation_data=val, callbacks=[callback_loss, callback_acc])
+    hist = model.fit(train, epochs=30, validation_data=val, callbacks=[callback_loss, callback_acc])
     
     # Evaluieren der Modellperformance mit den Testdaten
     loss, accuracy, recall, precision = model.evaluate(test)
