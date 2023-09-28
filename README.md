@@ -2,7 +2,7 @@
 # EchoWatch
 
 ## Kurzbeschreibung
-EchoWatch ist ein Deep-Learning-Modell zur Klassifikation von Maschinengeräuschen, entwickelt als Teil einer Bachelorarbeit.
+EchoWatch ist eine Anwendung mit einem Deep-Learning-Modell zur Klassifikation von Maschinengeräuschen , entwickelt als Teil meiner Bachelorarbeit.
 
 ## Inhaltsverzeichnis
 - [Installation & Benutzung](#installation--benutzung)
@@ -14,10 +14,10 @@ EchoWatch ist ein Deep-Learning-Modell zur Klassifikation von Maschinengeräusch
 - [Kontakt & Support](#kontakt--support)
 
 ## Installation & Benutzung
-1. Klone das Repository auf deinen lokalen Computer.
-2. Erstelle eine neue Python-Umgebung (empfohlen mit Conda oder virtualenv).
-3. Installiere die benötigten Bibliotheken mit `pip install -r requirements.txt`.
-4. Navigiere zum Projektverzeichnis und führe `main.py` aus.
+1. Klonen Sie das Repository auf Ihren lokalen Computer.
+2. Erstellen Sie eine neue Python-Umgebung (empfohlen mit Conda oder virtualenv).
+3. Installieren Sie die benötigten Bibliotheken mit `pip install -r requirements.txt`.
+4. Navigieren Sie zum Projektverzeichnis und führen die `main.py` aus.
 
 ## Technologie & Frameworks
 - Python
@@ -32,10 +32,11 @@ EchoWatch ist ein Deep-Learning-Modell zur Klassifikation von Maschinengeräusch
 - Scikit-Learn
 
 ## Funktionsweise & Features
-EchoWatch ist ein Deep-Learning-Modell, das Maschinengeräusche in Echtzeit klassifiziert. Es wurde mit einem speziell erstellten Datensatz trainiert, der sechs verschiedene Klassen von Maschinengeräuschen umfasst.
+EchoWatch kann unter anderen eine Echtzeitklassifizierung durchführen oder mit einem geladenen Modell eine bestimmte Audiodatei klassifizieren.
+Ein Screenshot von einem Klassifikationsergebniss der Echtzeitklassifikation wird angehangen.
 
 ## Beispiele & Screenshots
-(Fügen Sie hier Screenshots oder GIFs Ihres Projekts ein)
+
 
 ## Mitwirkende & Danksagungen
 (Danksagungen und Mitwirkende)
