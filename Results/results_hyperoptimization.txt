@@ -1,0 +1,25 @@
+Ergebniss Hyperparamteroptimierung  
+
+Beste Parameter 1: {'conv2d_filters': (64, 128, 256), 
+                    'kernel_size': (3, 3), 
+                    'max_pooling_size': (3, 3), 
+                    'dense_units': 64, 
+                    'l2_reg': 0.001, 
+                    'learning_rate': 0.0001}, 
+Genauigkeit: 0.9936286687850953, Verlust: 0.16152641773223878 
+
+Beste Parameter 2: {'conv2d_filters': (32, 64, 128),   
+                    'kernel_size': (5, 5), 
+                    'max_pooling_size': (4, 4), 
+                    'dense_units': 64, 
+                    'l2_reg': 0.1, 
+                    'learning_rate': 0.001}, 
+Genauigkeit: 0.9912413835525513, Verlust: 0.26284567415714266
+
+Beste Parameter 3: {'conv2d_filters': (32, 64, 128), 
+                    'kernel_size': (3, 3), 
+                    'max_pooling_size': (3, 3), 
+                    'dense_units': 32, 
+                    'l2_reg': 0.001, 
+                    'learning_rate': 0.001}, 
+Genauigkeit: 0.9896414399147033, Verlust: 0.12312131747603416
