@@ -62,14 +62,14 @@ def get_input_shape_from_data(dataset_path):
     return print(sample_spectrogram.shape)
 
 # Vorhersagen mit einem zuvor gespeicherten Modell
-def predict_with_saved_model(model_path, wav_file_path):
-    loaded_model = tf.keras.models.load_model(model_path)
-    wav = load_audio(wav_file_path)
+def predict_with_saved_model(loaded_model, wav_file_path):
+    load_function = load_audio(wav_file_path)
+    wav = load_function(wav_file_path[0])  # assuming wav_file_path is a list with one element
     processed_wav = preprocess_wav_for_model(wav)
     processed_wav_batched = tf.expand_dims(processed_wav, axis=0)
     predictions = loaded_model.predict(processed_wav_batched)
     predicted_class = tf.argmax(predictions, axis=1).numpy()[0]
-    return predicted_class
+    return print("Die vorhergesagte Klasse ist:", predicted_class, plot_spectrogram(processed_wav) )
     #BEISPIELAUFRUF: predict_with_saved_model(model_path = "../EchoWatch/models/pt500_model.h5", wav_file_path="../EchoWatch/data/PT500/C_1000_23.wav")
 
 # Live-Klassifikation mit einem Mikrofon an der Maschine
@@ -180,3 +180,11 @@ def plot_confusion_matrix(model, test, class_names, save_path=None):
     else:
         plt.show()
 
+
+def plot_spectrogram(spectrogram):
+    plt.figure(figsize=(10, 4))
+    plt.imshow(spectrogram.numpy(), aspect='auto', cmap='inferno')
+    plt.title('Spectrogram')
+    plt.colorbar(format='%+2.0f dB')
+    plt.tight_layout()
+    plt.show()
