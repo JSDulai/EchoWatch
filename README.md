@@ -35,7 +35,6 @@ EchoWatch kann unter anderen eine Echtzeitklassifizierung durchführen oder mit 
 Ein Screenshot von einem Klassifikationsergebniss der Echtzeitklassifikation wird angehangen.
 
 ## Beispiele & Screenshots
-![live_classification](https://github.com/JSDulai/EchoWatch/assets/108550388/88b2d3c4-7c02-401d-8b6c-3e8fcda2d2d9)
 
 
 ## Mitwirkende & Danksagungen
