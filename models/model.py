@@ -40,19 +40,19 @@ def model_dropout(num_classes, actiFunc, loss_func):
     
     model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(1491, 257, 1)))
     model.add(tf.keras.layers.MaxPooling2D((4, 4)))
-    model.add(tf.keras.layers.Dropout(0.25))
+    #model.add(tf.keras.layers.Dropout(0.25))
     
     model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
     model.add(tf.keras.layers.MaxPooling2D((4, 4)))
-    model.add(tf.keras.layers.Dropout(0.25))
+    #model.add(tf.keras.layers.Dropout(0.25))
 
     model.add(tf.keras.layers.Conv2D(128, (3, 3), activation='relu'))
     model.add(tf.keras.layers.MaxPooling2D((4, 4)))
-    model.add(tf.keras.layers.Dropout(0.25))
+    #model.add(tf.keras.layers.Dropout(0.25))
     
     model.add(tf.keras.layers.Flatten())
     model.add(tf.keras.layers.Dense(32, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
-    model.add(tf.keras.layers.Dropout(0.5))
+    #model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.BatchNormalization())
     model.add(tf.keras.layers.Dense(num_classes, activation=actiFunc))
     
