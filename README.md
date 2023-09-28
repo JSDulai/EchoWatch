@@ -8,10 +8,8 @@ EchoWatch ist eine Anwendung mit einem Deep-Learning-Modell zur Klassifikation v
 - [Technologie & Frameworks](#technologie--frameworks)
 - [Funktionsweise & Features](#funktionsweise--features)
 - [Beispiele & Screenshots](#beispiele--screenshots)
-- [Mitwirkende & Danksagungen](#mitwirkende--danksagungen)
-- [Lizenz](#lizenz)
-- [Kontakt & Support](#kontakt--support)
-
+- [Danksagungen](#danksagungen)
+- 
 ## Installation & Benutzung
 1. Klonen Sie das Repository auf Ihren lokalen Computer.
 2. Erstellen Sie eine neue Python-Umgebung (empfohlen mit Conda oder virtualenv).
@@ -37,11 +35,7 @@ Ein Screenshot von einem Klassifikationsergebniss der Echtzeitklassifikation wir
 ## Beispiele & Screenshots
 
 
-## Mitwirkende & Danksagungen
-(Danksagungen und Mitwirkende)
+## Danksagungen
+Vielen Dank an meine Schwester für das gründliche Korrekturlesen und hilfreiche Feedback!
 
-## Lizenz
-(Lizenzinformationen)
 
-## Kontakt & Support
-(Ihre Kontaktinformationen)
