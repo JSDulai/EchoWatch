@@ -37,7 +37,13 @@ EchoWatch ist eine Anwendung mit einem Deep-Learning-Modell zur Klassifikation v
 EchoWatch kann unter anderen eine Echtzeitklassifizierung durchführen oder mit einem geladenen Modell eine bestimmte Audiodatei klassifizieren.
 Ein Screenshot von einem Klassifikationsergebniss der Echtzeitklassifikation wird angehangen.
 
+Unter anderem sind in diesem Repository auch verschiedene Ergebnisse enthalte, welche den Rahmen in der Bachelorarbeit gesprengt hätten:
+- Alle erstellen Konfusionsmatrizen in dem Ordner models/matrices
+- Ergebnisse der Testdatensätze beider finaler Modelle in dem Ordner Results
+- Die kompletten Vorhersagen in einer CSV-Datei ebenfalls im Ordner Results
+
 ## Beispiele & Screenshots
+![EchoWatch Logo](images/live_classification.png)
 
 
 ## Danksagungen
