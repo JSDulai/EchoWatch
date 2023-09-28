@@ -69,7 +69,7 @@ def predict_with_saved_model(loaded_model, wav_file_path):
     processed_wav_batched = tf.expand_dims(processed_wav, axis=0)
     predictions = loaded_model.predict(processed_wav_batched)
     predicted_class = tf.argmax(predictions, axis=1).numpy()[0]
-    return print("Die vorhergesagte Klasse ist:", predicted_class, plot_spectrogram(processed_wav) )
+    return plot_spectrogram(processed_wav, f"Die Klasse dieses Spektrogramms ist: {predicted_class}") 
     #BEISPIELAUFRUF: predict_with_saved_model(model_path = "../EchoWatch/models/pt500_model.h5", wav_file_path="../EchoWatch/data/PT500/C_1000_23.wav")
 
 # Live-Klassifikation mit einem Mikrofon an der Maschine
@@ -95,10 +95,9 @@ def live_audio_classification(model):
     audio_data_reshaped = tf.reshape(audio_data, [-1])
     processed_data = preprocess_wav_for_model(audio_data_reshaped)
     prediction = model.predict(np.expand_dims(processed_data, axis=0))
-
     # Anzeige der Klassifikationsergebnisse
     print("Klassifikationsergebnis:", prediction)
-    return print("Die vorhergesagte Klasse ist:", np.argmax(prediction))
+    return plot_spectrogram(processed_data,np.argmax(prediction) )
     #BEISPIELAUFRUF: live_audio_classification(loaded_model)
 
 # Teilen der Audiodatei in mehrere Abschnitte und Speichern als separate WAV-Dateien
@@ -181,10 +180,10 @@ def plot_confusion_matrix(model, test, class_names, save_path=None):
         plt.show()
 
 
-def plot_spectrogram(spectrogram):
+def plot_spectrogram(spectrogram, title):
     plt.figure(figsize=(10, 4))
     plt.imshow(spectrogram.numpy(), aspect='auto', cmap='inferno')
-    plt.title('Spectrogram')
+    plt.title(title)
     plt.colorbar(format='%+2.0f dB')
     plt.tight_layout()
     plt.show()
