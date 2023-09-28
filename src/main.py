@@ -52,7 +52,7 @@ def main_binary_classification(data_path, class_names, num_classes, acti_func ='
     plot_confusion_matrix(model, test, class_names, save_path='./models/matrices/model_optimized_binary.png')
 
     # Modell speichern
-    model.save('../EchoWatch/models/binary_pump_model.h5')
+    model.save('../EchoWatch/models/cnns/binary_pump_model.h5')
 
     with open('pump_model_metrics.txt', 'w') as f:
         f.write(f"Test Loss: {loss}\n")
@@ -80,7 +80,7 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
     
     plot_confusion_matrix(model, test, class_names, save_path='./models/matrices/model_optimized.png')
 
-    model.save('./models/multiclass_pt500_model.h5')
+    model.save('./models/cnns/multiclass_pt500_model.h5')
 
     with open('pt500_model_metrics.txt', 'w') as f:
         f.write(f"Test Loss: {loss}\n")
@@ -91,14 +91,14 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
 
 # Hier wird das Modell geladen und eine Vorhersage wird getroffen!
 # Für beide kommt ein Spektrogramm samt Klassifikation raus
-loaded_model = tf.keras.models.load_model("./models/multiclass_pt500_model.h5")
+loaded_model = tf.keras.models.load_model("./models/cnns/multiclass_pt500_model.h5")
 predict_with_saved_model(loaded_model, ["./data/PT500/F_500_96.wav"])
 live_audio_classification(loaded_model)
 
 
 
 
-# Alles nachfolgend ist eher wichtig für das Training!
+# Alles nachfolgend ist eher für das Training!
 data_path = os.path.join('data', 'PT500')
 class_names=['A', 'B', 'C', 'D', 'E', 'F']
 num_classes=len(class_names)
@@ -111,6 +111,3 @@ data_path1 = os.path.join('data', 'pump', 'test')
 class_names1 = ['normal', 'anomaly']
 num_classes1 = len(class_names1)
 main_binary_classification(data_path1, class_names1, num_classes1)
-
-loaded_model = tf.keras.models.load_model("../EchoWatch/models/multiclass_pt500_model.h5")
-

@@ -81,8 +81,8 @@ def live_audio_classification(model):
     recording_duration = 10 # in sekunden
     samplerate = 16000 
 
-    with sd.InputStream(device=2,samplerate=samplerate, channels=1, dtype='float32') as stream:  #je nach device von der query, muss device=3 angepasst werden
-        audio_data, overflowed = stream.read(int(samplerate * recording_duration))
+    #je nach device von der query, muss device=3 angepasst werden
+    with sd.InputStream(device=2,samplerate=samplerate, channels=1, dtype='float32') as stream:          audio_data, overflowed = stream.read(int(samplerate * recording_duration))
         
     with wave.open('live_aufnahme.wav', 'w') as wf:
         wf.setnchannels(1)
@@ -176,7 +176,7 @@ def plot_confusion_matrix(model, test, class_names, save_path=None):
     else:
         plt.show()
 
-
+# Spektrogramm wird erstellt, um es ausgeben zu können
 def plot_spectrogram(spectrogram, title):
     plt.figure(figsize=(10, 4))
     plt.imshow(spectrogram.numpy(), aspect='auto', cmap='viridis')
