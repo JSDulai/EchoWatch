@@ -1,5 +1,4 @@
 # EchoWatch
-# EchoWatch
 
 ## Kurzbeschreibung
 EchoWatch ist eine Anwendung mit einem Deep-Learning-Modell zur Klassifikation von Maschinengeräuschen , entwickelt als Teil meiner Bachelorarbeit.
