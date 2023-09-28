@@ -16,6 +16,10 @@ EchoWatch ist eine Anwendung mit einem Deep-Learning-Modell zur Klassifikation v
 2. Erstellen Sie eine neue Python-Umgebung (empfohlen mit Conda oder virtualenv).
 3. Installieren Sie die benötigten Bibliotheken mit `pip install -r requirements.txt`.
 4. Navigieren Sie zum Projektverzeichnis und führen die `main.py` aus.
+5. Wählen Sie aus zwischen einer Vorhersage mit einem Modell und einer Audiodatei: 'predict_with_saved_model'
+6. Oder wählen Sie die Echtzeitklassifikation aus: 'live_audio_classification'
+   - Bei der Echtzeitklassifizierung muss gegebenenfalls das richtige Mikrofon ausgewählt werden.
+     Es wird automatisch eine Liste mit allen Mikrofonen nach Ausführen mit entsprechenden Ziffern angezeigt.
 
 ## Technologie & Frameworks
 - Python
