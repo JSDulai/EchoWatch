@@ -90,10 +90,10 @@ def main_multiclass_classification(data_path, class_names, num_classes, acti_fun
 
 
 # Hier wird das Modell geladen und eine Vorhersage wird getroffen!
-
+# Für beide kommt ein Spektrogramm samt Klassifikation raus
 loaded_model = tf.keras.models.load_model("./models/multiclass_pt500_model.h5")
 predict_with_saved_model(loaded_model, ["./data/PT500/F_500_96.wav"])
-
+live_audio_classification(loaded_model)
 
 
 

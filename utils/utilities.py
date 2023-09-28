@@ -81,7 +81,7 @@ def live_audio_classification(model):
     recording_duration = 10 # in sekunden
     samplerate = 16000 
 
-    with sd.InputStream(device=3,samplerate=samplerate, channels=1, dtype='float32') as stream:  #je nach device von der query, muss device=3 angepasst werden
+    with sd.InputStream(device=2,samplerate=samplerate, channels=1, dtype='float32') as stream:  #je nach device von der query, muss device=3 angepasst werden
         audio_data, overflowed = stream.read(int(samplerate * recording_duration))
         
     with wave.open('live_aufnahme.wav', 'w') as wf:
