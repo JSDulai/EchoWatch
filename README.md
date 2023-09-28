@@ -1,13 +1,15 @@
 # EchoWatch
 
 ## Kurzbeschreibung
+Ziel war es ein kompaktes Projekt zu erschaffen, welches von der Erstellung der Datensätze, dem Training eines CNNs bis hin zur Klassifikation neuer Daten bewältigen kann.
+Das ist EchoWatch!
 EchoWatch ist eine Anwendung mit einem Deep-Learning-Modell zur Klassifikation von Maschinengeräuschen , entwickelt als Teil meiner Bachelorarbeit.
 
 ## Inhaltsverzeichnis
 - [Installation & Benutzung](#installation--benutzung)
 - [Technologie & Frameworks](#technologie--frameworks)
 - [Funktionsweise & Features](#funktionsweise--features)
-- [Beispiele & Screenshots](#beispiele--screenshots)
+- [Screenshot](#screenshot)
 - [Danksagungen](#danksagungen)
 
 
@@ -42,7 +44,7 @@ Unter anderem sind in diesem Repository auch verschiedene Ergebnisse enthalte, w
 - Ergebnisse der Testdatensätze beider finaler Modelle in dem Ordner Results
 - Die kompletten Vorhersagen in einer CSV-Datei ebenfalls im Ordner Results
 
-## Beispiele & Screenshots
+## Screenshot
 ![EchoWatch Logo](images/live_classification.png)
 
 
